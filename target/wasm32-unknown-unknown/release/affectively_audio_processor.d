@@ -1,0 +1,1 @@
+E:\emotions\open-source\wasm-audio-processor\target\wasm32-unknown-unknown\release\affectively_audio_processor.wasm: E:\emotions\open-source\wasm-audio-processor\src\lib.rs E:\emotions\open-source\wasm-audio-processor\src\mixer.rs E:\emotions\open-source\wasm-audio-processor\src\mulaw.rs

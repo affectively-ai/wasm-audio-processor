@@ -22,7 +22,7 @@ High-performance WebAssembly audio processing utilities written in Rust.
 npm install @affectively/wasm-audio-processor
 # or
 yarn add @affectively/wasm-audio-processor
-# or  
+# or 
 bun add @affectively/wasm-audio-processor
 ```
 
@@ -39,10 +39,10 @@ affectively-audio-processor = "1.0"
 
 ```typescript
 import init, { 
-  mix_audio_streams, 
-  reduce_volume, 
-  create_silence,
-  AudioMixerConfig 
+ mix_audio_streams, 
+ reduce_volume, 
+ create_silence,
+ AudioMixerConfig 
 } from '@affectively/wasm-audio-processor';
 
 // Initialize WASM module
@@ -50,11 +50,11 @@ await init();
 
 // Mix two audio streams
 const config = new AudioMixerConfig(
-  0.3,    // whisper volume (0-1)
-  1.0,    // original volume (0-1)
-  100,    // fade in (ms)
-  100,    // fade out (ms)
-  8000    // sample rate
+ 0.3, // whisper volume (0-1)
+ 1.0, // original volume (0-1)
+ 100, // fade in (ms)
+ 100, // fade out (ms)
+ 8000 // sample rate
 );
 
 const mixedAudio = mix_audio_streams(originalBase64, whisperBase64, config);
@@ -100,11 +100,11 @@ Configuration for audio mixing:
 
 ```typescript
 new AudioMixerConfig(
-  whisperVolume: number,  // Volume for whisper stream (0-1)
-  originalVolume: number, // Volume for original stream (0-1)
-  fadeInMs: number,       // Fade-in duration in milliseconds
-  fadeOutMs: number,      // Fade-out duration in milliseconds
-  sampleRate: number      // Audio sample rate (e.g., 8000, 16000)
+ whisperVolume: number, // Volume for whisper stream (0-1)
+ originalVolume: number, // Volume for original stream (0-1)
+ fadeInMs: number, // Fade-in duration in milliseconds
+ fadeOutMs: number, // Fade-out duration in milliseconds
+ sampleRate: number // Audio sample rate (e.g., 8000, 16000)
 )
 ```
 
@@ -169,4 +169,4 @@ MIT License - see [LICENSE](./LICENSE) for details.
 
 ---
 
-Made with ❤️ by [AFFECTIVELY](https://affectively.app)
+Made with ️ by [AFFECTIVELY](https://affectively.ai)
