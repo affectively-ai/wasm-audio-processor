@@ -1,0 +1,43 @@
+{
+    "name": "@affectively/wasm-audio-processor",
+    "version": "1.0.0",
+    "description": "High-performance WebAssembly audio processing utilities - mix streams, adjust volume, generate silence.",
+    "main": "pkg/wasm_audio_processor.js",
+    "types": "pkg/wasm_audio_processor.d.ts",
+    "files": [
+        "pkg",
+        "src",
+        "Cargo.toml",
+        "LICENSE",
+        "README.md"
+    ],
+    "scripts": {
+        "build": "wasm-pack build --target web --out-dir pkg",
+        "build:node": "wasm-pack build --target nodejs --out-dir pkg-node",
+        "build:bundler": "wasm-pack build --target bundler --out-dir pkg-bundler",
+        "test": "cargo test",
+        "lint": "cargo clippy"
+    },
+    "keywords": [
+        "wasm",
+        "webassembly",
+        "audio",
+        "audio-processing",
+        "mixing",
+        "rust",
+        "performance"
+    ],
+    "author": "AFFECTIVELY <opensource@affectively.app>",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/affectively-ai/wasm-audio-processor.git"
+    },
+    "bugs": {
+        "url": "https://github.com/affectively-ai/wasm-audio-processor/issues"
+    },
+    "homepage": "https://github.com/affectively-ai/wasm-audio-processor#readme",
+    "publishConfig": {
+        "access": "public"
+    }
+}
