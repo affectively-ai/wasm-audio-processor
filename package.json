@@ -1,6 +1,6 @@
 {
   "name": "@affectively/wasm-audio-processor",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "High-performance WebAssembly audio processing utilities - mix streams, adjust volume, generate silence.",
   "main": "pkg/wasm_audio_processor.js",
   "types": "pkg/wasm_audio_processor.d.ts",
@@ -28,7 +28,7 @@
     "performance"
   ],
   "author": "AFFECTIVELY <opensource@affectively.ai>",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/affectively-ai/wasm-audio-processor.git"
