@@ -13,6 +13,9 @@ mod mixer;
 use mulaw::{mu_law_decode, mu_law_encode};
 use mixer::apply_volume;
 
+// Re-export mixer utilities for external consumers
+pub use mixer::{apply_fade as fade_audio, mix_samples as mix_audio_samples};
+
 /// Audio mixing configuration
 #[wasm_bindgen]
 pub struct AudioMixerConfig {
@@ -62,9 +65,9 @@ pub fn mix_audio_streams(
     let original_bytes = base64_decode(original_audio);
     let whisper_bytes = base64_decode(whisper_audio);
 
-    // Calculate fade samples
-    let fade_in_samples = ((config.fade_in_ms / 1000.0) * config.sample_rate) as usize;
-    let fade_out_samples = ((config.fade_out_ms / 1000.0) * config.sample_rate) as usize;
+    // Calculate fade samples (clamp negatives to zero to prevent usize overflow)
+    let fade_in_samples = ((config.fade_in_ms.max(0.0) / 1000.0) * config.sample_rate.max(0.0)) as usize;
+    let fade_out_samples = ((config.fade_out_ms.max(0.0) / 1000.0) * config.sample_rate.max(0.0)) as usize;
 
     // Decode mu-law to linear samples (pre-allocate for better performance)
     let mut original_samples = Vec::with_capacity(original_bytes.len());
@@ -83,14 +86,14 @@ pub fn mix_audio_streams(
     for (i, &sample) in whisper_samples.iter().enumerate() {
         let mut scaled = apply_volume(sample, config.whisper_volume);
         
-        // Apply fade in
+        // Apply fade in: ratio goes from 0.0 at i=0 to 1.0 at i=fade_in_samples
         if i < fade_in_samples && fade_in_samples > 0 {
-            scaled = (scaled as f64 * (i as f64 / fade_in_samples as f64)) as i16;
+            scaled = (scaled as f64 * ((i + 1) as f64 / (fade_in_samples + 1) as f64)) as i16;
         }
-        // Apply fade out
-        else if i >= whisper_len - fade_out_samples && fade_out_samples > 0 {
-            let fade_out_index = whisper_len - 1 - i;
-            scaled = (scaled as f64 * (fade_out_index as f64 / fade_out_samples as f64)) as i16;
+        // Apply fade out: ratio goes from 1.0 at fade start down to 0.0 at last sample
+        else if fade_out_samples > 0 && i >= whisper_len.saturating_sub(fade_out_samples) {
+            let samples_remaining = whisper_len - 1 - i;
+            scaled = (scaled as f64 * ((samples_remaining + 1) as f64 / (fade_out_samples + 1) as f64)) as i16;
         }
         
         scaled_whisper.push(scaled);
@@ -166,16 +169,31 @@ pub fn reduce_volume(audio: &str, volume: f64) -> String {
 /// Create silence buffer
 #[wasm_bindgen]
 pub fn create_silence(duration_ms: f64, sample_rate: f64) -> String {
-    let num_samples = ((duration_ms / 1000.0) * sample_rate) as usize;
-    let silence = vec![0xffu8; num_samples]; // 0xff is silence in mu-law
+    let num_samples = ((duration_ms.max(0.0) / 1000.0) * sample_rate.max(0.0)) as usize;
+    // mu-law encode(0) gives the correct silence byte for this codec implementation
+    let silence_byte = mu_law_encode(0);
+    let silence = vec![silence_byte; num_samples];
     base64_encode(&silence)
 }
 
 // Helper functions for base64 encoding/decoding
 fn base64_decode(input: &str) -> Vec<u8> {
+    // Try STANDARD first, then STANDARD_NO_PAD for flexibility
     general_purpose::STANDARD
         .decode(input)
-        .unwrap_or_default()
+        .or_else(|_| general_purpose::STANDARD_NO_PAD.decode(input))
+        .unwrap_or_else(|e| {
+            web_sys_log(&format!("base64 decode error: {}", e));
+            Vec::new()
+        })
+}
+
+fn web_sys_log(msg: &str) {
+    // Use web_sys if available, otherwise this is a no-op in non-wasm contexts
+    #[cfg(target_arch = "wasm32")]
+    web_sys::console::warn_1(&wasm_bindgen::JsValue::from_str(msg));
+    #[cfg(not(target_arch = "wasm32"))]
+    eprintln!("{}", msg);
 }
 
 fn base64_encode(input: &[u8]) -> String {
