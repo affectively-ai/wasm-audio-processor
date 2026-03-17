@@ -31,12 +31,12 @@
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/affectively-ai/wasm-audio-processor.git"
+    "url": "git+https://github.com/forkjoin-ai/wasm-audio-processor.git"
   },
   "bugs": {
-    "url": "https://github.com/affectively-ai/wasm-audio-processor/issues"
+    "url": "https://github.com/forkjoin-ai/wasm-audio-processor/issues"
   },
-  "homepage": "https://github.com/affectively-ai/wasm-audio-processor#readme",
+  "homepage": "https://github.com/forkjoin-ai/wasm-audio-processor#readme",
   "publishConfig": {
     "access": "public"
   }
