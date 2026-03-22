@@ -1,5 +1,19 @@
 /// Audio mixing operations
 
+/// Buleyean weight: probability of sample contributing given rounds observed
+/// and times rejected (silent). Samples silent in every round collapse to
+/// floor weight and get skipped.
+#[inline]
+pub fn buleyean_weight(rounds: usize, rejections: usize) -> f64 {
+    if rounds == 0 { return 1.0; }
+    let r = rejections.min(rounds) as f64;
+    let n = rounds as f64;
+    (n - r) / n
+}
+
+/// Floor-weight threshold: samples at or below this are eliminated.
+pub const FLOOR_WEIGHT: f64 = 0.0;
+
 /// Apply volume scaling to a sample
 pub fn apply_volume(sample: i16, volume: f64) -> i16 {
     ((sample as f64) * volume) as i16
@@ -38,14 +52,31 @@ pub fn apply_fade(
     result
 }
 
-/// Mix two sample arrays together with clipping protection
+/// Mix two sample arrays together with clipping protection.
+/// Deceptacon: skip floor-weight samples where both channels are silent.
 pub fn mix_samples(samples1: &[i16], samples2: &[i16]) -> Vec<i16> {
     let max_length = samples1.len().max(samples2.len());
     let mut result = Vec::with_capacity(max_length);
 
+    // Track consecutive silent samples for floor-weight elimination
+    let mut silent_rounds: usize = 0;
+
     for i in 0..max_length {
         let s1 = if i < samples1.len() { samples1[i] } else { 0 };
         let s2 = if i < samples2.len() { samples2[i] } else { 0 };
+
+        // Deceptacon: skip floor-weight samples.
+        // If both channels are silent, track rejection rounds.
+        if s1 == 0 && s2 == 0 {
+            silent_rounds += 1;
+            // After enough silent rounds, floor-weight samples are just silence
+            if silent_rounds >= 10 && buleyean_weight(silent_rounds, silent_rounds) <= FLOOR_WEIGHT {
+                result.push(0);
+                continue;
+            }
+        } else {
+            silent_rounds = 0;
+        }
 
         let mixed = (s1 as i32 + s2 as i32).clamp(-32768, 32767);
         result.push(mixed as i16);
