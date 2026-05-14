@@ -10,70 +10,70 @@
     "build": {
       "executor": "a0:run-commands",
       "options": {
-        "command": "node scripts/open-source-repo-target.mjs build open-source/wasm-audio-processor",
+        "command": "pnpm run monster -- scripts/open-source-repo-target.mjs build open-source/wasm-audio-processor",
         "cwd": "."
       }
     },
     "lint": {
       "executor": "a0:run-commands",
       "options": {
-        "command": "node scripts/open-source-repo-target.mjs lint open-source/wasm-audio-processor",
+        "command": "pnpm run monster -- scripts/open-source-repo-target.mjs lint open-source/wasm-audio-processor",
         "cwd": "."
       }
     },
     "test": {
       "executor": "a0:run-commands",
       "options": {
-        "command": "node scripts/open-source-repo-target.mjs test open-source/wasm-audio-processor",
+        "command": "pnpm run monster -- scripts/open-source-repo-target.mjs test open-source/wasm-audio-processor",
         "cwd": "."
       }
     },
     "typecheck": {
       "executor": "a0:run-commands",
       "options": {
-        "command": "node scripts/open-source-repo-target.mjs typecheck open-source/wasm-audio-processor",
+        "command": "pnpm run monster -- scripts/open-source-repo-target.mjs typecheck open-source/wasm-audio-processor",
         "cwd": "."
       }
     },
     "github:push": {
       "executor": "a0:run-commands",
       "options": {
-        "command": "node scripts/open-source-repo-target.mjs github-push open-source/wasm-audio-processor",
+        "command": "pnpm run monster -- scripts/open-source-repo-target.mjs github-push open-source/wasm-audio-processor",
         "cwd": "."
       }
     },
     "forge:push": {
       "executor": "a0:run-commands",
       "options": {
-        "command": "node scripts/open-source-repo-target.mjs forge-push open-source/wasm-audio-processor",
+        "command": "pnpm run monster -- scripts/open-source-repo-target.mjs forge-push open-source/wasm-audio-processor",
         "cwd": "."
       }
     },
     "push": {
       "executor": "a0:run-commands",
       "options": {
-        "command": "node scripts/open-source-repo-target.mjs push open-source/wasm-audio-processor",
+        "command": "pnpm run monster -- scripts/open-source-repo-target.mjs push open-source/wasm-audio-processor",
         "cwd": "."
       }
     },
     "submodule:update-reference": {
       "executor": "a0:run-commands",
       "options": {
-        "command": "node scripts/open-source-repo-target.mjs submodule-update-reference open-source/wasm-audio-processor",
+        "command": "pnpm run monster -- scripts/open-source-repo-target.mjs submodule-update-reference open-source/wasm-audio-processor",
         "cwd": "."
       }
     },
     "pr:list": {
       "executor": "a0:run-commands",
       "options": {
-        "command": "node scripts/open-source-repo-target.mjs pr-list open-source/wasm-audio-processor",
+        "command": "pnpm run monster -- scripts/open-source-repo-target.mjs pr-list open-source/wasm-audio-processor",
         "cwd": "."
       }
     },
     "pr:merge-all": {
       "executor": "a0:run-commands",
       "options": {
-        "command": "node scripts/open-source-repo-target.mjs pr-merge-all open-source/wasm-audio-processor",
+        "command": "pnpm run monster -- scripts/open-source-repo-target.mjs pr-merge-all open-source/wasm-audio-processor",
         "cwd": "."
       }
     }
