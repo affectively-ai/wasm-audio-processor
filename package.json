@@ -41,5 +41,9 @@
   "homepage": "https://github.com/forkjoin-ai/wasm-audio-processor#readme",
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "bun:test": "latest"
   }
 }
