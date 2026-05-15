@@ -16,7 +16,9 @@
     "build:node": "wasm-pack build --target nodejs --out-dir pkg-node",
     "build:bundler": "wasm-pack build --target bundler --out-dir pkg-bundler",
     "test": "cargo test",
-    "lint": "cargo clippy"
+    "lint": "cargo clippy",
+    "type-check": "echo \"No TypeScript configuration found, skipping typecheck\"",
+    "typecheck": "echo \"No TypeScript configuration found, skipping typecheck\""
   },
   "keywords": [
     "wasm",
